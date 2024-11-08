@@ -4,6 +4,6 @@ author: 'github.com/ArtfulAzeria'
 
 runs:
   using: 'node20'
-  main: '/dist/index.js'
+  main: '/home/runner/work/year-left/year-left/./dist/index.js'
 
 
