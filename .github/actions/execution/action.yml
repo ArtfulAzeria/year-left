@@ -1,9 +1,9 @@
-name: 'Deployment Action'
-description: 'Execute the code'
-author: 'github.com/ArtfulAzeria'
+name: "Deployment Action"
+description: "Execute the code"
+author: "github.com/ArtfulAzeria"
 
 runs:
-  using: 'node20'
-  main: '/dist/index.js'
+  using: "node20"
+  main: "dist/index.js"
 
 

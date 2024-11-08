@@ -1,10 +1,10 @@
-name: Execute
+name: "execute"
 
 on:
   workflow_dispatch:
 
 jobs:
-  run-my-action:
+  execute:
     name: Post
     runs-on: ubuntu-latest
     steps:
