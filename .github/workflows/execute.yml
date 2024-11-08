@@ -2,17 +2,17 @@ name: "execute"
 
 on:
   workflow_dispatch:
-
+  
+env: 
+          BLUESKY_USERNAME: ${{ secrets.BLUESKY_USERNAME }}
+          BLUESKY_PASSWORD: ${{ secrets.BLUESKY_PASSWORD }}
+          
 jobs:
   execute:
     name: Post
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
-      
-        env: 
-          BLUESKY_USERNAME: ${{ secrets.BLUESKY_USERNAME }}
-          BLUESKY_PASSWORD: ${{ secrets.BLUESKY_PASSWORD }}
 
       - name: Install dependencies
         run: npm isntall
