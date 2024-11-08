@@ -3,7 +3,7 @@ description: 'Execute the code'
 author: 'github.com/ArtfulAzeria'
 
 runs:
-  using: 'nodenext'
+  using: 'node20'
   main: 'dist/index.js'
 
 
