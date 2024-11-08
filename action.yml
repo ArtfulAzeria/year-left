@@ -1,0 +1,9 @@
+name: 'Deployment Action'
+description: 'Execute the code'
+author: 'github.com/ArtfulAzeria'
+
+runs:
+  using: 'nodenext'
+  main: 'dist/index.js'
+
+
