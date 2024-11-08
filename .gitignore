@@ -1,0 +1,22 @@
+# Dependecies
+node_modules/
+package-lock.json
+yarn.lock
+
+# Compilation output
+dist/
+build/
+
+# Enviroment
+.env
+
+# Generable TypeScript conf
+*.tsbuildinfo
+
+# Temp OS files
+.DS_Store
+Thumbs.db
+
+# IDE conf
+.vscode/
+.idea/
