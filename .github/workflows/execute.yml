@@ -8,7 +8,7 @@ jobs:
     name: Post
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v3
 
       - name: Install dependencies
         run: npm isntall
@@ -16,5 +16,10 @@ jobs:
       - name: Build
         run: npm run build
 
-      - name: Run my action
-        uses: ./.github/actions/execution
+      - name: Start
+        run: npm start
+
+        env:
+          BLUESKY_USERNAME: ${{ secrets.BLUESKY_IDENTIFIER }}
+          BLUESKY_PASSWORD: ${{ secrets.BLUESKY_PASSWORD }}
+
