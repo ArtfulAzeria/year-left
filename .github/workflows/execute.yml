@@ -2,8 +2,10 @@ name: "execute"
 
 on:
   workflow_dispatch:
-  
 
+env: 
+          BLUESKY_USERNAME: ${{ secrets.BLUESKY_USERNAME }}
+          BLUESKY_PASSWORD: ${{ secrets.BLUESKY_PASSWORD }}
           
 jobs:
   execute:
