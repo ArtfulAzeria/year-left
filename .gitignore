@@ -10,6 +10,11 @@ build/
 # Enviroment
 .env
 
+# Logs
+*.log
+logs/
+npm-debug.log*
+
 # Generable TypeScript conf
 *.tsbuildinfo
 

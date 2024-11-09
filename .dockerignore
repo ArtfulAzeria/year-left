@@ -1,0 +1,18 @@
+# Node.js dependencies
+node_modules
+dist
+
+# Archivos de entorno
+.env
+
+# Archivos de Git
+.git
+.gitignore
+
+# Archivos de logs
+*.log
+logs/
+
+# Archivos temporales y de sistema
+.DS_Store
+Thumbs.db
