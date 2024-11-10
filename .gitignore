@@ -25,3 +25,6 @@ Thumbs.db
 # IDE conf
 .vscode/
 .idea/
+
+# Private deploy stuff
+*.sh

@@ -16,3 +16,7 @@ logs/
 # Archivos temporales y de sistema
 .DS_Store
 Thumbs.db
+
+# Ignorable deploy stuff
+.deploy.sh
+.wslpurifier.sh
