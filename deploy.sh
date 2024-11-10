@@ -33,6 +33,9 @@ Executing year-left, a BlueSky bot to know
 how much time is left in the current year.\n
 "
 
+printf "🔵  | Loading .env variables..."
+export $(grep -v '^#' ../utils/year-left/.env | xargs)
+
 printf "🔵  | Installing dependencies..."
 npm install
 
