@@ -23,7 +23,7 @@ if [ $? -ne 0 ]; then
     printf "\033[0;31mDeploy\033[0m | Error while updating. You f* up something again.\n"
     exit 1
 fi
-printf "\033[0;32mDeploy\033[0m |Applied origin changes, if any.\n"
+printf "\033[0;32mDeploy\033[0m | Applied origin changes, if any.\n"
 
 printf "
 
