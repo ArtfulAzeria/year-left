@@ -7,7 +7,7 @@ cd "$(dirname "$0")"
 printf "\033[0;34mDeploy\033[0m | Looking for git status...\n"
 if [[ $(git status --porcelain) ]]; then
     printf "\033[0;33mDeploy\033[0m | You have git stuff to do. Fix before deploying.\n"
-#    exit 1
+    exit 1
 fi
 printf "\033[0;32mDeploy\033[0m | Everything looks up to date.\n"
 
@@ -42,13 +42,13 @@ how much time is left in the current year.\n
 "
 
 printf "\033[0;34mDeploy\033[0m | Loading .env variables...\n"
-#export $(grep -v '^#' ../utils/year-left/.env | xargs)
+export $(grep -v '^#' ../utils/year-left/.env | xargs)
 
 printf "\033[0;34mDeploy\033[0m | Installing dependencies...\n"
-#npm install
+npm install
 
 printf "\033[0;34mDeploy\033[0m | Compiling TypeScript...\n"
-#npx tsc
+npx tsc
 
 printf "\033[0;34mDeploy\033[0m | Starting the service...\n"
-#npm start
+npm start
