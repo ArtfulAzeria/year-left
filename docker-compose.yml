@@ -1,9 +1,0 @@
-services:
-  bot:
-    build: .
-    container_name: year-left
-    env_file: .env
-    volumes:
-      - .:/wdir
-    ports:
-      - "3000:3000"
