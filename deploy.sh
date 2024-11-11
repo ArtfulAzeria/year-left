@@ -17,9 +17,11 @@ git fetch origin
 git checkout main
 PULL_OUTPUT=$(git pull origin main)
 
-# Verificar si hubo cambios
+# Look for changes from origin
 if [[ "$PULL_OUTPUT" != *"Already up to date."* ]]; then
-    printf "\033[0;33mDeploy\033[0m | There is new stuff. Execution continues.\n"
+    printf "\033[0;33mDeploy\033[0m | There is new stuff.\n"
+    # Uncomment this to stop in case of changes
+    #exit 1
 fi
 
 if [ $? -ne 0 ]; then
