@@ -79,7 +79,7 @@ while [[ $# -gt 0 ]]; do
     -a|--account)
         if [ -n "$2" ] && [[ "$2" != -* ]]; then
             account="$2"
-            if [[ "$account" != "year-left" && "$mode" != "devnull" ]]; then
+            if [[ "$account" != "year-left" && "$account" != "devnull" ]]; then
                 echo -e "year-left ${LOG_ERRR} Error: Invalid account. Use 'year-left' or 'devnull'."
                 error=true
             fi
