@@ -2,13 +2,12 @@
 
 # Initialization
 cd "$(dirname "$0")"
-domain="bot.azeria.dev"
 source ../utils/generic/formats.sh
 error=false
 
 # Default values for the flags
 mode="dev"
-account="none"
+account="devnull"
 git="ignore"
 log="info"
 
@@ -19,7 +18,7 @@ function usage {
     echo "Options:"
     echo "  -h, --help                Show this help message and exit"
     echo "  -m, --mode <mode>         Set the mode (default: dev, options: dev, pro)"
-    echo "  -a, --account <account>   Specify the account name (default: none)"
+    echo "  -a, --account <account>   Account name (default: devnull, options: year-left, devnull)"
     echo "  -g, --git <action>        Git action (default: ignore, options: ignore, update)"
     echo "  -l, --log <level>         Log level (default: info, options: info, debug)"
     exit 0
@@ -39,11 +38,55 @@ function git_update {
     fi
 }
 
+# Execution functions
+function pro_execution {
+    echo -e "year-left ${LOG_INFO} Loading $account credentials..."
+    export $(grep -v '^#' ../utils/$account/.env | xargs)
+
+    echo -e "year-left ${LOG_INFO} Installing dependencies..."
+    npm install
+
+    echo -e "year-left ${LOG_INFO} Compiling TypeScript..."
+    npx tsc
+
+    echo -e "year-left ${LOG_INFO} Executing the service..."
+    npm start -- --account="$account"
+}
+
+function dev_execution {
+    echo -e "year-left ${LOG_INFO} Loading $account credentials..."
+    export $(grep -v '^#' ../utils/$account/.env | xargs)
+    echo -e "year-left ${LOG_DBUG} Credentials loaded:"
+    echo -e "year-left ${LOG_DBUG} BLUESKY_USERNAME: $BLUESKY_USERNAME"
+    echo -e "year-left ${LOG_DBUG} BLUESKY_PASSWORD: $(echo "$BLUESKY_PASSWORD" | sed 's/[a-zA-Z0-9]/*/g')"
+
+    echo -e "year-left ${LOG_INFO} Installing dependencies..."
+    npm install
+
+    echo -e "year-left ${LOG_INFO} Compiling TypeScript..."
+    npx tsc
+
+    echo -e "year-left ${LOG_DBUG} Mock: Executing the service..."
+    npm start -- --account="$account"
+}
+
 # Parse options
 while [[ $# -gt 0 ]]; do
     case "$1" in
     -h|--help)
         usage
+        ;;
+    -a|--account)
+        if [ -n "$2" ] && [[ "$2" != -* ]]; then
+            account="$2"
+            if [[ "$account" != "year-left" && "$mode" != "devnull" ]]; then
+                echo -e "year-left ${LOG_ERRR} Error: Invalid account. Use 'year-left' or 'devnull'."
+                error=true
+            fi
+        else
+            echo -e "year-left ${LOG_ERRR} Error: Missing argument for -a|--account."
+            error=true
+        fi
         ;;
     -m|--mode)
         if [ -n "$2" ] && [[ "$2" != -* ]]; then
@@ -51,17 +94,9 @@ while [[ $# -gt 0 ]]; do
             if [[ "$mode" != "dev" && "$mode" != "pro" ]]; then
                 echo -e "year-left ${LOG_ERRR} Error: Invalid mode. Use 'dev' or 'pro'."
                 error=true
-        fi
+            fi
         else
             echo -e "year-left ${LOG_ERRR} Error: Missing argument for -m|--mode."
-            error=true
-        fi
-        ;;
-    -a|--account)
-        if [ -n "$2" ] && [[ "$2" != -* ]]; then
-            account="$2"
-        else
-            echo -e "year-left ${LOG_ERRR} Error: Missing argument for -a|--account."
             error=true
         fi
         ;;
@@ -99,6 +134,11 @@ if $error; then
     exit 1
 fi
 
+if [[ "$mode" == "dev" ]]; then
+        account=devnull
+        echo -e "year-left ${LOG_INFO} Dev mode activated. Account devnull forced."
+fi
+
 if [[ "$log" == "debug" ]]; then
     echo -e "year-left ${LOG_DBUG} Mode: $mode"
     echo -e "year-left ${LOG_DBUG} Account: $account"
@@ -118,6 +158,23 @@ else
     echo -e "year-left ${LOG_INFO} Running in production mode (posting live)."
 fi
 
+echo -e "${BRIGHT_MAGENTA}
 
+ █████╗ ███████╗███████╗██████╗ ██╗ █████╗
+██╔══██╗╚══███╔╝██╔════╝██╔══██╗██║██╔══██╗
+███████║  ███╔╝ █████╗  ██████╔╝██║███████║
+██╔══██║ ███╔╝  ██╔══╝  ██╔══██╗██║██╔══██║
+██║  ██║███████╗███████╗██║  ██║██║██║  ██║
+╚═╝  ╚═╝╚══════╝╚══════╝╚═╝  ╚═╝╚═╝╚═╝  ╚═╝
+${RESET}
+Executing year-left, a BlueSky bot to know
+how much time is left in the current year.
 
+"
+
+if [[ "$mode" == "pro" ]]; then
+    pro_execution
+else
+    dev_execution
+fi
 

@@ -1,17 +1,21 @@
 import { BskyAgent } from '@atproto/api';
-import * as dotenv from 'dotenv';
 const timeUtility = require('./utilities/time')
 const graphicUtility = require('./utilities/graphic')
 
-dotenv.config();
+const args = process.argv.slice(2);
+const accountArg = args.find(arg => arg.startsWith("--account="));
+const account = accountArg ? accountArg.split('=')[1] : "default";
+console.log(`Running with account: ${account}`);
+require('dotenv').config({ path: __dirname+`\\..\\..\\utils\\${account}\\.env` });
 
 const agent = new BskyAgent({
-    service: 'https://bsky.social'
+    service: "https://bsky.social"
 })
 
 async function main() {
     await agent.login({ identifier: process.env.BLUESKY_USERNAME!, password: process.env.BLUESKY_PASSWORD! })
-
+    console.log(process.env.BLUESKY_USERNAME);
+    
     let now: Date = new Date();
     let start: Date = new Date(now.getFullYear(), 0, 0);
 
@@ -35,16 +39,22 @@ async function main() {
     let post = `${graphicUtility.drawLine(timeLeft)} ${timeLeft}%\nDays left: ${year-day}/${year}`
 
     if (day === 1) {
-        const newYear = `🤖 Happy new year, human! Hope you have an awesome year! 🎉\n`
+        const newYear = "🤖 Happy new year, human! Hope you have an awesome year! 🎉\n"
         post = newYear + post
     }
 
-    await agent.post({
+let postret = await agent.post({
         text: post
     });
 
-
+    console.log(postret);
+    console.log("_______________________________\n");
+    console.log(postret.cid);
+    console.log("_______________________________\n");
+    console.log(postret.uri);
+    
     console.log("Just posted!")
+    
 }
 
 main();
