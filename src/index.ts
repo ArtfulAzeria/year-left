@@ -10,12 +10,16 @@ console.log(__dirname+`/../../utils/${account}/.env`);
 console.log(__dirname+'/../../utils/'+account+'/.env');
 
 require('dotenv').config({ path: __dirname+'/../../utils/'+account+'/.env'});
+console.log("debug#01");
+console.log(process.env.BLUESKY_USERNAME);
+console.log("debug#02");
 
 const agent = new BskyAgent({
     service: "https://bsky.social"
 })
-
+console.log("debug#03");
 async function main() {
+    console.log("debug#04");
     await agent.login({ identifier: process.env.BLUESKY_USERNAME!, password: process.env.BLUESKY_PASSWORD! })
     console.log(process.env.BLUESKY_USERNAME);
     
@@ -45,7 +49,7 @@ async function main() {
         const newYear = "🤖 Happy new year, human! Hope you have an awesome year! 🎉\n"
         post = newYear + post
     }
-
+    console.log("debug#05");
 let postret = await agent.post({
         text: post
     });
@@ -59,5 +63,5 @@ let postret = await agent.post({
     console.log("Just posted!")
     
 }
-
+console.log("debug#06");
 main();
