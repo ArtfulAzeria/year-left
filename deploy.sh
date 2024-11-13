@@ -20,7 +20,7 @@ function usage {
     echo "  -m, --mode <mode>         Set the mode (default: dev, options: dev, pro)"
     echo "  -a, --account <account>   Account name (default: devnull, options: year-left, devnull)"
     echo "  -g, --git <action>        Git action (default: ignore, options: ignore, update)"
-    echo "  -l, --log <level>         Log level (default: info, options: info, debug)"
+    echo "  -l, --log <level>         Log level (default: info, options: debug, info)"
     exit 0
 }
 
@@ -50,7 +50,7 @@ function pro_execution {
     npx tsc
 
     echo -e "year-left ${LOG_INFO} Executing the service..."
-    npm start -- --account="$account"
+    npm start -- --account="$account" --mode="$mode" --log="$log"
 }
 
 function dev_execution {
@@ -66,8 +66,8 @@ function dev_execution {
     echo -e "year-left ${LOG_INFO} Compiling TypeScript..."
     npx tsc
 
-    echo -e "year-left ${LOG_DBUG} Mock: Executing the service..."
-    npm start -- --account="$account"
+    echo -e "year-left ${LOG_DBUG} Executing the service..."
+    npm start -- --account="$account" --mode="$mode" --log="$log"
 }
 
 # Parse options

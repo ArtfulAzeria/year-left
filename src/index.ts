@@ -1,28 +1,52 @@
 import { BskyAgent } from '@atproto/api';
 const timeUtility = require('./utilities/time')
 const graphicUtility = require('./utilities/graphic')
+const style = require('./utilities/style')
 
+console.log(`${style.log.DBUG} Loading variables...`);
+// Default values
+const DEFAULTS = {
+    account: "devnull",  // Available options: "devnull", "yaer-left"
+    mode: "dev",         // Available options: "dev", "pro"
+    log: "info"          // Available options: "debug", "info"
+};
+
+// Parse command line arguments
 const args = process.argv.slice(2);
-const accountArg = args.find(arg => arg.startsWith("--account="));
-const account = accountArg ? accountArg.split('=')[1] : "default";
-console.log(`Running with account: ${account}`);
-console.log(__dirname+`/../../utils/${account}/.env`);
-console.log(__dirname+'/../../utils/'+account+'/.env');
 
-require('dotenv').config({ path: __dirname+'/../../utils/'+account+'/.env'});
-console.log("debug#01");
-console.log(process.env.BLUESKY_USERNAME);
-console.log("debug#02");
+// Function to extract the value from arguments
+function getArgValue(flag: string): string | undefined {
+    const arg = args.find(arg => arg.startsWith(`--${flag}=`));
+    return arg ? arg.split("=")[1] : undefined;
+}
 
+// Extract values or use defaults
+const account = getArgValue("account") || DEFAULTS.account;
+const mode = getArgValue("mode") || DEFAULTS.mode;
+const log = getArgValue("log") || DEFAULTS.log;
+
+// Log the extracted arguments
+if (log=="debug") {
+    console.log(`${style.log.DBUG} Account: ${account}`);
+    console.log(`${style.log.DBUG} Mode: ${mode}`);
+    console.log(`${style.log.DBUG} Log Level: ${log}`);
+}
+
+// Load credentials
+require('dotenv').config({ path: __dirname + '/../../utils/' + account + '/.env' });
 const agent = new BskyAgent({
     service: "https://bsky.social"
 })
-console.log("debug#03");
+if (log=="debug") {
+    console.log(`${style.log.DBUG} BLUESKY_USERNAME: ${process.env.BLUESKY_USERNAME!}`);
+    console.log(`${style.log.DBUG} BLUESKY_PASSWORD: ${process.env.BLUESKY_PASSWORD!.replace(/[a-zA-Z0-9]/g, '*')}`);
+}
+
 async function main() {
-    console.log("debug#04");
+    console.log(`${style.log.DBUG} Loging in...`);
     await agent.login({ identifier: process.env.BLUESKY_USERNAME!, password: process.env.BLUESKY_PASSWORD! })
-    console.log(process.env.BLUESKY_USERNAME);
-    
+
+    console.log(`${style.log.DBUG} Generating the post...`);
     let now: Date = new Date();
     let start: Date = new Date(now.getFullYear(), 0, 0);
 
@@ -34,7 +58,7 @@ async function main() {
     }
 
     let diff: number = now.getTime() - start.getTime();
-    
+
     let oneDay: number = 1000 * 60 * 60 * 24;
     let day: number = Math.floor(diff / oneDay);
 
@@ -43,25 +67,25 @@ async function main() {
 
     // let override: = process.argv[2] || false
 
-    let post = `${graphicUtility.drawLine(timeLeft)} ${timeLeft}%\nDays left: ${year-day}/${year}`
+    let post = `${graphicUtility.drawLine(timeLeft)} ${timeLeft}%\nDays left: ${year - day}/${year}`
 
     if (day === 1) {
+        console.log(`${style.log.INFO} Happy new year!`);
         const newYear = "🤖 Happy new year, human! Hope you have an awesome year! 🎉\n"
         post = newYear + post
     }
-    console.log("debug#05");
-let postret = await agent.post({
-        text: post
-    });
+    
+    console.log(`${style.log.DBUG} Ready to post.`);
+    var response: Object = "";
+    if (mode=="pro") {
+        response = await agent.post({
+            text: post
+        });
+    }
 
-    console.log(postret);
-    console.log("_______________________________\n");
-    console.log(postret.cid);
-    console.log("_______________________________\n");
-    console.log(postret.uri);
-    
-    console.log("Just posted!")
-    
+    response?
+        console.log(`${style.log.INFO} Post made. Return data:\n${JSON.stringify(response, null, 2)}`):
+        console.log(`${style.log.WARN} Post not made.`);
 }
-console.log("debug#06");
+
 main();
