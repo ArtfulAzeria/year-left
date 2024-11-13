@@ -6,7 +6,7 @@ const args = process.argv.slice(2);
 const accountArg = args.find(arg => arg.startsWith("--account="));
 const account = accountArg ? accountArg.split('=')[1] : "default";
 console.log(`Running with account: ${account}`);
-require('dotenv').config({ path: __dirname+`\\..\\..\\utils\\${account}\\.env` });
+require('dotenv').config({ path: __dirname+`/../../utils/${account}/.env` });
 
 const agent = new BskyAgent({
     service: "https://bsky.social"
